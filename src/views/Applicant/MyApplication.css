@@ -1,0 +1,84 @@
+/* Main container for the new timeline */
+.timeline-container-new {
+  position: relative;
+  padding: 1rem 0;
+}
+
+/* A single item (row) in the timeline */
+.timeline-item-new {
+  display: flex;
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+/* Styling for the date and attachment icon on the left */
+.timeline-date-new {
+  flex-shrink: 0;
+  width: 80px; /* Adjust as needed */
+  text-align: right;
+  padding-top: 0.25rem;
+  padding-right: 20px;
+  font-weight: 500;
+  color: #8898aa; /* Muted text color */
+}
+
+.timeline-date-new .icon {
+  display: block;
+  margin-top: 0.25rem;
+  color: #adb5bd;
+}
+
+/* The vertical line and the circle marker */
+.timeline-marker {
+  position: absolute;
+  left: 80px; /* Aligns with the end of the date column */
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #dee2e6; /* Default line color */
+}
+
+/* The circle on the timeline */
+.timeline-marker::after {
+  content: "";
+  position: absolute;
+  top: 6px; /* Adjust vertical alignment of the circle */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: #fff;
+  border: 2px solid #adb5bd; /* Default circle border */
+}
+
+/* The main content card on the right */
+.timeline-content-new {
+  flex-grow: 1;
+  padding-left: 25px; /* Space from the marker line */
+}
+.timeline-content-new .card {
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+/* --- Active State Styling --- */
+
+/* Highlight the active item's marker */
+.timeline-item-new.active .timeline-marker {
+  background-color: #5e72e4; /* Use your primary color */
+}
+.timeline-item-new.active .timeline-marker::after {
+  border-color: #5e72e4; /* Use your primary color */
+}
+
+/* Highlight the active item's date */
+.timeline-item-new.active .timeline-date-new {
+  color: #32325d; /* Darker color for active date */
+}
+
+/* Highlight the active item's content card */
+.timeline-item-new.active .card {
+  background-color: #f6f9fc; /* A very light blue/gray */
+  border: 1px solid #dee2e6;
+}
