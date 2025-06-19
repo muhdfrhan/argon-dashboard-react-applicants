@@ -139,7 +139,7 @@ const ApplicantRegister = () => {
                 <Col md="6">
                   <FormGroup>
                     <label>Bank Name</label>
-                    <Input name="bank_name" type="select" value={formData.bankName} onChange={handleInputChange} required>
+                    <Input name="bankName" type="select" value={formData.bankName} onChange={handleInputChange} required>
                       <option value="">-- Select a Bank --</option>
                       {malaysianBanks.map(bank => (
                         <option key={bank} value={bank}>{bank}</option>
@@ -150,7 +150,7 @@ const ApplicantRegister = () => {
                 <Col md="6">
                   <FormGroup>
                     <label>Bank Account Number</label>
-                    <Input name="account_number" type="text" value={formData.accountNumber} onChange={handleInputChange} placeholder="Enter account number" required />
+                    <Input name="accountNumber" type="text" value={formData.accountNumber} onChange={handleInputChange} placeholder="Enter account number" required />
                   </FormGroup>
                 </Col>
               </Row>
