@@ -1,7 +1,7 @@
 // src/apicall.js
 import axios from "axios";
 
-const BASE_URL = "http://192.168.0.240:3000/api"; // Ensure this matches your backend
+const BASE_URL = "http://localhost:3000/api"; // Ensure this matches your backend
 
 // Helper to get token from localStorage
 const getToken = () => localStorage.getItem("authToken");
@@ -73,6 +73,10 @@ export const getMyApplicationStatus = async () => {
   return response.data;
 };
 
+export const verifyNric = async (nricData) => {
+  const response = await axios.post(`${BASE_URL}/validationR/verify-nric`, nricData);
+  return response.data;
+};
 
 export const registerApplicant = async (registrationData) => {
   const response = await axios.post(`${BASE_URL}/register/applicant`, registrationData);

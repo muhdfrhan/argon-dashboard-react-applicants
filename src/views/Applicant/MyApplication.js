@@ -4,9 +4,8 @@ import {
   Container, Row, Col, Spinner, Alert, Button, 
   Card, CardHeader, CardBody, ListGroup, ListGroupItem, Badge,
   Modal, ModalHeader, ModalBody, ModalFooter,
-  Form, FormGroup, Label, Input // <-- 1. IMPORT FORM COMPONENTS
+  Form, FormGroup, Label, Input
 } from "reactstrap";
-// --- 2. IMPORT THE NEW API FUNCTION ---
 import { getMyApplicationStatus, uploadAdditionalDocument } from "../../apicall";
 
 const MyApplication = () => {
@@ -17,17 +16,15 @@ const MyApplication = () => {
   const [modalOpen, setModalOpen] = useState(false); 
   const [selectedApplication, setSelectedApplication] = useState(null); 
 
-  // --- 3. ADD STATE FOR THE UPLOAD FORM ---
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadError, setUploadError] = useState('');
   const [uploadSuccess, setUploadSuccess] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   
-  // --- 4. STATE TO TRIGGER REFETCHING DATA ---
   const [dataVersion, setDataVersion] = useState(0);
 
   const fetchApplicationData = useCallback(async () => {
-      setLoading(true); // Show loading spinner on refetch
+      setLoading(true);
       try {
         const data = await getMyApplicationStatus();
         setApplications(Array.isArray(data) ? data : (data ? [data] : []));
@@ -40,15 +37,14 @@ const MyApplication = () => {
       } finally {
         setLoading(false);
       }
-    }, []); // Removed dataVersion from dependencies to avoid loop, we will call it manually
+    }, []);
 
   useEffect(() => {
     fetchApplicationData();
-  }, [fetchApplicationData, dataVersion]); // Refetch when dataVersion changes
+  }, [fetchApplicationData, dataVersion]);
 
 
   const toggleModal = () => {
-    // Reset upload form state when closing the modal
     if (modalOpen) {
         setSelectedFile(null);
         setUploadError('');
@@ -63,10 +59,9 @@ const MyApplication = () => {
     toggleModal();
   };
 
-  // --- 5. HANDLER FOR THE UPLOAD FORM ---
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
-    setUploadError(''); // Clear errors on new selection
+    setUploadError('');
   };
   
   const handleUploadSubmit = async (e) => {
@@ -86,18 +81,17 @@ const MyApplication = () => {
     try {
       const response = await uploadAdditionalDocument(selectedApplication.applicationId, formData);
       setUploadSuccess(response.message || 'Document uploaded successfully!');
-      setSelectedFile(null); // Clear the file input
+      setSelectedFile(null); 
 
-      // Trigger a refetch of all application data to show the new status
       setTimeout(() => {
-        toggleModal(); // Close modal after a short delay
-        setDataVersion(prev => prev + 1); // Increment to refetch
-      }, 2000); // 2-second delay for user to read success message
+        toggleModal(); 
+        setDataVersion(prev => prev + 1); 
+      }, 2000); 
 
     } catch (err) {
       setUploadError(err.response?.data?.error || 'Failed to upload document.');
     } finally {
-      setIsUploading(false);
+      setIsUploading(isUploading => !isUploading);
     }
   };
 
@@ -107,10 +101,8 @@ const MyApplication = () => {
     return `RM ${parseFloat(value).toFixed(2)}`;
   };
   
-  // This variable will be used inside the modal to check status
   const canUpload = selectedApplication?.status?.title === 'Documents Requested';
 
-  // The rest of your component for displaying the cards...
   if (loading && applications.length === 0) { return <Container className="text-center mt-5"><Spinner /> <p>Loading your applications...</p></Container>; }
   if (error) { return <Container className="mt-5"><Alert color="danger">{error}</Alert></Container>; }
   if (applications.length === 0 && !loading) { 
@@ -147,7 +139,6 @@ const MyApplication = () => {
                 </CardHeader>
                 <CardBody className="p-4">
                   <p className="text-muted">{app.status?.description || 'No description available.'}</p>
-                   {/* Highlight if action is required */}
                    {app.status.title === 'Documents Requested' && 
                         <Alert color="warning" className="mt-2 mb-3">
                             <strong>Action Required:</strong> Please open to view details and upload the requested documents.
@@ -169,8 +160,7 @@ const MyApplication = () => {
             </Col>
           ))}
         </Row>
-
-      {/* --- 6. FULLY UPDATED MODAL WITH UPLOAD FORM --- */}
+      
       {selectedApplication && (
         <Modal isOpen={modalOpen} toggle={toggleModal} size="lg" centered>
           <ModalHeader toggle={toggleModal}>
@@ -185,6 +175,13 @@ const MyApplication = () => {
                 </Badge>
               </ListGroupItem>
               
+              {/* --- MODIFICATION START --- */}
+              {/* Display the assigned staff member's name */}
+              <ListGroupItem>
+                <strong>Case Officer:</strong> {selectedApplication.staff_name || 'N/A'}
+              </ListGroupItem>
+              {/* --- MODIFICATION END --- */}
+
               {selectedApplication.details?.status_detail && (
                 <ListGroupItem>
                   <Alert color="info" className="mb-0">
@@ -194,7 +191,6 @@ const MyApplication = () => {
                 </ListGroupItem>
               )}
 
-              {/* --- The conditional upload form --- */}
               {canUpload && (
                 <ListGroupItem>
                   <Card className="my-2 p-3 bg-light border">

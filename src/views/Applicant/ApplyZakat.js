@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { 
   Container, Card, CardBody, Button, Spinner, Row, Col, Form, FormGroup, Label, Input, CardHeader 
 } from "reactstrap";
+import {
+  Modal, ModalHeader, ModalBody, ModalFooter // Import Modal components
+} from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { submitZakatApplication } from "../../apicall";
 import axios from "axios";
@@ -36,7 +39,7 @@ const ZakatApplicationForm = ({ onSubmit, loading }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get("http://192.168.0.240:3000/api/asnaf-categories");
+        const res = await axios.get("http://localhost:3000/api/asnaf-categories");
         setCategories(res.data || []);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
@@ -300,18 +303,29 @@ const ZakatApplicationForm = ({ onSubmit, loading }) => {
 // Parent component that handles the API call logic (no changes needed here)
 const Apply = () => {
   const [loading, setLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalTitle, setModalTitle] = useState(""); // State for modal title
   const navigate = useNavigate();
+
+  const toggleModal = () => setModalOpen(!modalOpen);
 
   const handleFormSubmit = async (formData) => {
     try {
       setLoading(true);
       await submitZakatApplication(formData);
-      alert("Application submitted successfully.");
-      navigate("/applicant/my-application");
+      setModalTitle("Application Status"); // Your custom title
+      setModalMessage("Your Zakat application has been successfully submitted! We will review it shortly.");
+      setModalOpen(true); // Open the modal
+      // Don't navigate immediately, let the user close the modal first if desired, or navigate after a delay
+      // For now, navigate after the modal is shown. If you want a delay, use setTimeout
+      // setTimeout(() => navigate("/applicant/my-application"), 2000);
     } catch (error) {
       const errorMsg = error.response ? error.response.data.error || "An unknown error occurred." : error.message;
       console.error("Submission Error:", error.response || error);
-      alert(`Submission failed: ${errorMsg}`);
+      setModalTitle("Submission Error"); // Your custom error title
+      setModalMessage(`We encountered an issue submitting your application: ${errorMsg}. Please try again.`);
+      setModalOpen(true); // Open the modal
     } finally {
       setLoading(false);
     }
@@ -324,8 +338,28 @@ const Apply = () => {
           <ZakatApplicationForm onSubmit={handleFormSubmit} loading={loading} />
         </Col>
       </Row>
+
+      {/* Custom Modal for alerts */}
+      <Modal isOpen={modalOpen} toggle={toggleModal}>
+        <ModalHeader toggle={toggleModal}>{modalTitle}</ModalHeader> {/* Use modalTitle here */}
+        <ModalBody>
+          {modalMessage}
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={() => {
+            toggleModal();
+            // You can decide when to navigate. Here, it navigates on closing the success modal
+            if (modalTitle === "Application Status") { // Only navigate on success
+              navigate("/applicant/my-application");
+            }
+          }}>
+            OK
+          </Button>
+        </ModalFooter>
+      </Modal>
     </Container>
   );
 };
 
 export default Apply;
+

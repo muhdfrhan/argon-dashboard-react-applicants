@@ -119,12 +119,12 @@ const ApplicantProfile = () => {
                 <div className="pl-lg-4">
                   <Row>
                     <Col lg="6"><FormGroup><label className="text-uppercase text-primary font-weight-bold small mb-1">Full Name</label><CardText className="pt-2 font-weight-bold">{profile.full_name}</CardText></FormGroup></Col>
-                    <Col lg="6"><FormGroup><label className="text-uppercase text-primary font-weight-bold small mb-1">NRIC</label><CardText className="pt-2">{profile.nric}</CardText></FormGroup></Col>
+                    <Col lg="6"><FormGroup><label className="text-uppercase text-primary font-weight-bold small mb-1">NRIC</label><CardText className="pt-2 font-weight-bold">{profile.nric}</CardText></FormGroup></Col>
                   </Row>
                   {/* ✅ NEW: Row to display Applicant ID and Date of Birth */}
                   <Row>
-                    <Col lg="6"><FormGroup><label className="text-uppercase text-primary font-weight-bold small mb-1">Applicant ID</label><CardText className="pt-2">{profile.applicant_id}</CardText></FormGroup></Col>
-                    <Col lg="6"><FormGroup><label className="text-uppercase text-primary font-weight-bold small mb-1">Date of Birth</label><CardText className="pt-2">{formatDate(profile.date_of_birth)}</CardText></FormGroup></Col>
+                    <Col lg="6"><FormGroup><label className="text-uppercase text-primary font-weight-bold small mb-1">Applicant ID</label><CardText className="pt-2 font-weight-bold">{profile.applicant_id}</CardText></FormGroup></Col>
+                    <Col lg="6"><FormGroup><label className="text-uppercase text-primary font-weight-bold small mb-1">Date of Birth</label><CardText className="pt-2 font-weight-bold">{formatDate(profile.date_of_birth)}</CardText></FormGroup></Col>
                   </Row>
                   <Row>
                     <Col lg="6"><FormGroup><label className="text-uppercase text-primary font-weight-bold small mb-1">Marital Status</label>{isEditing ? (<Input type="select" name="marital_status_id" value={formData.marital_status_id} onChange={handleInputChange}>{maritalStatuses.map((s) => (<option key={s.status_id} value={s.status_id}>{s.status_name}</option>))}</Input>) : (<CardText className="pt-2">{profile.status_name}</CardText>)}</FormGroup></Col>

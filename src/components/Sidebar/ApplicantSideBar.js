@@ -45,7 +45,7 @@ const ApplicantSidebar = () => {
             </NavItem>
             <NavItem>
               <NavLink to="/applicant/apply" tag={RRNavLink}>
-                <i className="ni ni-fat-add text-success" /> Apply for Aid
+                <i className="ni ni-fat-add text-success" /> Apply for Zakat
               </NavLink>
             </NavItem>
             <NavItem>
